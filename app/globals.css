@@ -1,0 +1,906 @@
+:root {
+  --bg: #060910;
+  --text: #e7eef6;
+  --muted: #8ea0b3;
+  --line: #1a2836;
+  --card: #0a101ad1;
+  --cyan: #7ee7ff;
+  --amber: #ffb454;
+  --live: #5dffb0;
+  --sans: var(--font-geist-sans), sans-serif;
+  --mono: var(--font-geist-mono), ui-monospace, monospace;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  color: var(--text);
+  background-color: var(--bg);
+  background-image: radial-gradient(rgba(126, 231, 255, 0.16) 1px, transparent 1px);
+  background-size: 22px 22px;
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.atmosphere {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(640px 340px at 12% -8%, rgba(80, 190, 255, 0.22), transparent 70%),
+    radial-gradient(520px 300px at 100% 0, rgba(255, 180, 84, 0.12), transparent 68%);
+}
+
+.rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(var(--cyan), var(--amber));
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  width: min(820px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 5rem;
+}
+
+.topbar,
+.status-row,
+.job-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.topbar nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+
+.live-pill,
+.label,
+.role,
+.dates,
+.detail,
+.tech,
+.skill-group h3,
+.tag,
+.school,
+.runtime,
+.status {
+  font-family: var(--mono);
+}
+
+h2 {
+  margin: 0;
+}
+
+.label {
+  color: var(--cyan);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+.live-pill,
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--live);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status.stopped {
+  color: var(--muted);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--live);
+  box-shadow: 0 0 10px var(--live);
+  animation: pulse 1.8s ease infinite;
+}
+
+.status.stopped .status-dot {
+  background: #66788a;
+  box-shadow: none;
+  animation: none;
+}
+
+.header h1 {
+  margin: 1.1rem 0 0.4rem;
+  font-size: clamp(2.1rem, 5vw, 3.15rem);
+  font-weight: 560;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.role {
+  min-height: 1.4em;
+  margin: 0;
+  color: var(--amber);
+  font-size: 0.95rem;
+}
+
+.type-line {
+  display: inline-block;
+  overflow: hidden;
+  width: calc(var(--chars) * 1ch);
+  white-space: nowrap;
+  vertical-align: bottom;
+  animation: type 1.1s steps(var(--chars), end) 0.35s both;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--amber);
+  animation: blink 1s step-end infinite;
+}
+
+.runtime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.15rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.runtime li {
+  padding: 0.22rem 0.5rem;
+  color: var(--cyan);
+  font-size: 0.72rem;
+  background: rgba(8, 20, 32, 0.7);
+  border: 1px solid #234056;
+}
+
+section {
+  margin-top: 2.6rem;
+}
+
+.summary-panel {
+  margin-top: 1.5rem;
+  padding: 1rem 1.05rem;
+  background: var(--card);
+  border-left: 2px solid var(--amber);
+}
+
+.summary {
+  margin: 0.55rem 0 0;
+  color: #c9d5e2;
+  line-height: 1.65;
+}
+
+.jobs,
+.education,
+.tags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jobs,
+.skill-groups,
+.education {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.job,
+.skill-group {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+.job {
+  padding: 1rem 1rem 1.05rem 1.05rem;
+}
+
+.job::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(var(--cyan), var(--amber));
+  transform: scaleY(0);
+  transform-origin: center top;
+  transition: transform 0.25s;
+}
+
+.job:hover {
+  border-color: #2c536c;
+}
+
+.job:hover::before {
+  transform: scaleY(1);
+}
+
+.job h3 {
+  margin: 0.55rem 0 0;
+  font-size: 1.08rem;
+  font-weight: 560;
+}
+
+.dates,
+.company,
+.detail,
+.tech {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.company,
+.detail {
+  margin: 0.3rem 0 0;
+}
+
+.detail {
+  color: var(--amber);
+}
+
+.job ul {
+  margin: 0.8rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.job li {
+  margin: 0.35rem 0;
+  color: #c9d5e2;
+  line-height: 1.55;
+}
+
+.tech {
+  margin: 0.9rem 0 0;
+  line-height: 1.5;
+}
+
+.skill-group {
+  padding: 0.8rem 0.9rem;
+}
+
+.skill-group h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.tag {
+  padding: 0.22rem 0.5rem;
+  color: #d5e0ea;
+  font-size: 0.75rem;
+  border: 1px solid #24384a;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.tag:hover {
+  color: var(--cyan);
+  background: rgba(126, 231, 255, 0.08);
+  border-color: var(--cyan);
+}
+
+.education li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--card);
+  border-left: 2px solid var(--cyan);
+}
+
+.theme-toggle {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.55rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  background: #101820;
+  border: 1px solid var(--line);
+}
+
+.theme-toggle select {
+  color: var(--text);
+  font: inherit;
+  background: transparent;
+  border: 0;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes type {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: calc(var(--chars) * 1ch);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-line {
+    width: auto;
+    animation: none;
+  }
+
+  .caret,
+  .status-dot {
+    animation: none;
+  }
+}
+
+html[data-theme]:not([data-theme="control"]) [data-block] > .label,
+html[data-theme]:not([data-theme="control"]) .pill-label {
+  font-size: 0;
+}
+
+html[data-theme]:not([data-theme="control"]) .label::after,
+html[data-theme]:not([data-theme="control"]) .pill-label::after {
+  font-size: 0.78rem;
+}
+
+html[data-theme]:not([data-theme="control"]) .atmosphere,
+html[data-theme="log"] .rail,
+html[data-theme="api"] .rail,
+html[data-theme="schematic"] .rail,
+html[data-theme="packet"] .rail,
+html[data-theme="diff"] .rail {
+  display: none;
+}
+
+html[data-theme="api"] {
+  --bg: #0c1220;
+  --card: #121a2b;
+  --line: #2a384c;
+  --cyan: #8ab4ff;
+  --amber: #c4b5fd;
+  --text: #e7eef8;
+}
+
+html[data-theme="api"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="api"] .header h1 {
+  font-family: var(--sans);
+}
+
+html[data-theme="api"] [data-block="spec"] > .label::after { content: "description"; }
+html[data-theme="api"] [data-block="experience"] > .label::after { content: "paths"; }
+html[data-theme="api"] [data-block="skills"] > .label::after { content: "components"; }
+html[data-theme="api"] [data-block="education"] > .label::after { content: "info"; }
+html[data-theme="api"] .pill-label::after { content: "openapi"; }
+html[data-theme="api"] .job h3::before {
+  content: "GET  ";
+  color: #3dd68c;
+  font-size: 0.72rem;
+}
+
+html[data-theme="trace"] [data-block="spec"] > .label::after { content: "root"; }
+html[data-theme="trace"] [data-block="experience"] > .label::after { content: "spans"; }
+html[data-theme="trace"] [data-block="skills"] > .label::after { content: "attributes"; }
+html[data-theme="trace"] [data-block="education"] > .label::after { content: "resource"; }
+html[data-theme="trace"] .pill-label::after { content: "trace"; }
+html[data-theme="trace"] .job { padding-top: 1.7rem; }
+html[data-theme="trace"] .job::before {
+  top: 0.85rem;
+  bottom: auto;
+  width: 42%;
+  height: 6px;
+  background: var(--cyan);
+  transform: none;
+}
+html[data-theme="trace"] .job:nth-child(2) { margin-left: 8%; }
+html[data-theme="trace"] .job:nth-child(2)::before { width: 26%; background: var(--amber); }
+html[data-theme="trace"] .job:nth-child(3) { margin-left: 16%; }
+html[data-theme="trace"] .job:nth-child(3)::before { width: 46%; background: #7aa2ff; }
+
+html[data-theme="plan"] {
+  --bg: #071207;
+  --text: #d7f5df;
+  --muted: #87a892;
+  --line: #1d3a24;
+  --card: #0c1a0e;
+  --cyan: #7dffb3;
+  --amber: #d6ff4a;
+  --live: #7dffb3;
+}
+
+html[data-theme="plan"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="plan"] [data-block="spec"] > .label::after { content: "query"; }
+html[data-theme="plan"] [data-block="experience"] > .label::after { content: "explain"; }
+html[data-theme="plan"] [data-block="skills"] > .label::after { content: "indexes"; }
+html[data-theme="plan"] [data-block="education"] > .label::after { content: "source"; }
+html[data-theme="plan"] .pill-label::after { content: "explain"; }
+html[data-theme="plan"] .job {
+  margin-left: 1rem;
+  border-left: 1px dashed #2d6a3a;
+}
+html[data-theme="plan"] .job:first-child h3::before { content: "AGGREGATE  "; color: var(--live); }
+html[data-theme="plan"] .job:nth-child(2) h3::before { content: "INDEX  "; color: var(--amber); }
+html[data-theme="plan"] .job:nth-child(3) h3::before { content: "GROUP  "; color: var(--cyan); }
+
+html[data-theme="log"] body {
+  font-family: var(--mono);
+  background: #090909;
+}
+
+html[data-theme="log"] .header h1 {
+  font-family: var(--mono);
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+html[data-theme="log"] [data-block="spec"] > .label::after { content: "note"; }
+html[data-theme="log"] [data-block="experience"] > .label::after { content: "journal"; }
+html[data-theme="log"] [data-block="skills"] > .label::after { content: "fields"; }
+html[data-theme="log"] [data-block="education"] > .label::after { content: "record"; }
+html[data-theme="log"] .pill-label::after { content: "info"; }
+html[data-theme="log"] .summary-panel,
+html[data-theme="log"] .job,
+html[data-theme="log"] .skill-group,
+html[data-theme="log"] .education li {
+  background: transparent;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: #242424;
+}
+html[data-theme="log"] .job::before { display: none; }
+
+html[data-theme="pipeline"] [data-block="spec"] > .label::after { content: "build"; }
+html[data-theme="pipeline"] [data-block="experience"] > .label::after { content: "stages"; }
+html[data-theme="pipeline"] [data-block="skills"] > .label::after { content: "cache"; }
+html[data-theme="pipeline"] [data-block="education"] > .label::after { content: "artifact"; }
+html[data-theme="pipeline"] .pill-label::after { content: "pipeline"; }
+html[data-theme="pipeline"] .jobs {
+  margin-left: 0.7rem;
+  padding-left: 1.15rem;
+  border-left: 2px solid #243844;
+}
+html[data-theme="pipeline"] .job::before {
+  top: 1.15rem;
+  bottom: auto;
+  left: -1.45rem;
+  width: 10px;
+  height: 10px;
+  background: #66788a;
+  border-radius: 50%;
+  transform: none;
+}
+html[data-theme="pipeline"] .job:first-child::before {
+  background: var(--live);
+  box-shadow: 0 0 8px var(--live);
+}
+
+html[data-theme="schematic"] {
+  --bg: #071526;
+  --text: #d6e4f0;
+  --muted: #8eb0c8;
+  --line: #9fd4ff66;
+  --card: transparent;
+  --cyan: #9fd4ff;
+  --amber: #d6e4f0;
+  --live: #9fd4ff;
+}
+
+html[data-theme="schematic"] body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(159, 212, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 212, 255, 0.14) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+html[data-theme="schematic"] [data-block="spec"] > .label::after { content: "note"; }
+html[data-theme="schematic"] [data-block="experience"] > .label::after { content: "blocks"; }
+html[data-theme="schematic"] [data-block="skills"] > .label::after { content: "pins"; }
+html[data-theme="schematic"] [data-block="education"] > .label::after { content: "origin"; }
+html[data-theme="schematic"] .pill-label::after { content: "sheet"; }
+html[data-theme="schematic"] .summary-panel,
+html[data-theme="schematic"] .job,
+html[data-theme="schematic"] .skill-group,
+html[data-theme="schematic"] .education li,
+html[data-theme="schematic"] .tag,
+html[data-theme="schematic"] .runtime li {
+  background: transparent;
+}
+html[data-theme="schematic"] .theme-toggle { background: #071526; }
+
+html[data-theme="packet"] {
+  --bg: #050806;
+  --text: #c8f5c4;
+  --muted: #7d9a78;
+  --line: #1c3320;
+  --card: #0a120c;
+  --cyan: #9dff6a;
+  --amber: #d6ff4a;
+  --live: #9dff6a;
+}
+
+html[data-theme="packet"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="packet"] [data-block="spec"] > .label::after { content: "capture"; }
+html[data-theme="packet"] [data-block="experience"] > .label::after { content: "frames"; }
+html[data-theme="packet"] [data-block="skills"] > .label::after { content: "protocols"; }
+html[data-theme="packet"] [data-block="education"] > .label::after { content: "header"; }
+html[data-theme="packet"] .pill-label::after { content: "sniff"; }
+html[data-theme="packet"] .job h3::before { color: var(--amber); font-size: 0.72rem; }
+html[data-theme="packet"] .job:first-child h3::before { content: "0001  "; }
+html[data-theme="packet"] .job:nth-child(2) h3::before { content: "0002  "; }
+html[data-theme="packet"] .job:nth-child(3) h3::before { content: "0003  "; }
+html[data-theme="packet"] .job li { font-family: var(--mono); }
+
+html[data-theme="replica"] {
+  --bg: #001e2b;
+  --text: #e8fff2;
+  --muted: #8fb9a4;
+  --line: #164a36;
+  --card: #06281c;
+  --cyan: #00ed64;
+  --amber: #00ed64;
+  --live: #00ed64;
+}
+
+html[data-theme="replica"] [data-block="spec"] > .label::after { content: "oplog"; }
+html[data-theme="replica"] [data-block="experience"] > .label::after { content: "members"; }
+html[data-theme="replica"] [data-block="skills"] > .label::after { content: "indexes"; }
+html[data-theme="replica"] [data-block="education"] > .label::after { content: "config"; }
+html[data-theme="replica"] .pill-label::after { content: "rs0"; }
+html[data-theme="replica"] .status { font-size: 0; }
+html[data-theme="replica"] .status::after {
+  content: "PRIMARY";
+  color: #00ed64;
+  font-size: 0.72rem;
+}
+html[data-theme="replica"] .status.stopped::after {
+  content: "SECONDARY";
+  color: #8fb9a4;
+}
+
+html[data-theme="topic"] {
+  --bg: #14120c;
+  --text: #f4ecd4;
+  --muted: #b3a27a;
+  --line: #3a3220;
+  --card: #1d1a12;
+  --cyan: #e8c547;
+  --amber: #f0a202;
+  --live: #e8c547;
+}
+
+html[data-theme="topic"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="topic"] [data-block="spec"] > .label::after { content: "topic"; }
+html[data-theme="topic"] [data-block="experience"] > .label::after { content: "partitions"; }
+html[data-theme="topic"] [data-block="skills"] > .label::after { content: "groups"; }
+html[data-theme="topic"] [data-block="education"] > .label::after { content: "offset"; }
+html[data-theme="topic"] .pill-label::after { content: "broker"; }
+html[data-theme="topic"] .job h3::before,
+html[data-theme="topic"] .skill-group h3::before {
+  color: var(--amber);
+  font-size: 0.72rem;
+}
+html[data-theme="topic"] .job:first-child h3::before { content: "p0  "; }
+html[data-theme="topic"] .job:nth-child(2) h3::before { content: "p1  "; }
+html[data-theme="topic"] .job:nth-child(3) h3::before { content: "p2  "; }
+html[data-theme="topic"] .skill-group h3::before { content: "group  "; }
+
+html[data-theme="diff"] {
+  --bg: #0d1117;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --line: #30363d;
+  --card: #161b22;
+  --cyan: #79c0ff;
+  --amber: #7ee787;
+  --live: #3fb950;
+}
+
+html[data-theme="diff"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="diff"] [data-block="spec"] > .label::after { content: "resume.ts"; }
+html[data-theme="diff"] [data-block="experience"] > .label::after { content: "experience.ts"; }
+html[data-theme="diff"] [data-block="skills"] > .label::after { content: "skills.ts"; }
+html[data-theme="diff"] [data-block="education"] > .label::after { content: "education.ts"; }
+html[data-theme="diff"] .pill-label::after { content: "review"; }
+html[data-theme="diff"] .job:first-child {
+  background: rgba(63, 185, 80, 0.12);
+  border-color: #238636;
+}
+html[data-theme="diff"] .job:not(:first-child) { background: transparent; }
+html[data-theme="diff"] .job li { list-style: none; }
+html[data-theme="diff"] .job:first-child li::before { content: "+ "; color: #3fb950; }
+
+html[data-theme="heat"] {
+  --bg: #140c08;
+  --text: #f6e7dc;
+  --muted: #b89a88;
+  --line: #3a2418;
+  --card: #1c120e;
+  --cyan: #ffb454;
+  --amber: #ff7a45;
+  --live: #ff5a36;
+}
+
+html[data-theme="heat"] [data-block="spec"] > .label::after { content: "signal"; }
+html[data-theme="heat"] [data-block="experience"] > .label::after { content: "load"; }
+html[data-theme="heat"] [data-block="skills"] > .label::after { content: "capacity"; }
+html[data-theme="heat"] [data-block="education"] > .label::after { content: "baseline"; }
+html[data-theme="heat"] .pill-label::after { content: "hot"; }
+html[data-theme="heat"] .status-dot { box-shadow: none; animation: none; }
+html[data-theme="heat"] .job:first-child {
+  background: rgba(255, 90, 54, 0.14);
+  border-color: #ff5a36;
+}
+html[data-theme="heat"] .job:not(:first-child) { opacity: 0.7; }
+html[data-theme="heat"] .rail { background: #ff5a36; }
+
+html[data-theme="rust"] {
+  --bg: #1a1210;
+  --text: #f6ebe6;
+  --muted: #c4a090;
+  --line: #3d241c;
+  --card: #241814;
+  --cyan: #f74c00;
+  --amber: #dea584;
+  --live: #f74c00;
+}
+html[data-theme="node"] {
+  --bg: #141816;
+  --text: #e7f2e4;
+  --muted: #9aaf96;
+  --line: #2a3328;
+  --card: #1c241c;
+  --cyan: #68a063;
+  --amber: #b7d7a8;
+  --live: #68a063;
+}
+html[data-theme="java"] {
+  --bg: #1e1f22;
+  --text: #bcbec4;
+  --muted: #8c8e94;
+  --line: #393b40;
+  --card: #2b2d30;
+  --cyan: #cc7832;
+  --amber: #6897bb;
+  --live: #cc7832;
+}
+html[data-theme="python"] {
+  --bg: #12151c;
+  --text: #e8e6df;
+  --muted: #8b93a7;
+  --line: #2a3142;
+  --card: #1b2230;
+  --cyan: #ffd43b;
+  --amber: #4b8bbe;
+  --live: #ffd43b;
+}
+html[data-theme="html"] {
+  --bg: #1a120f;
+  --text: #f6ebe6;
+  --muted: #c4a090;
+  --line: #3d241c;
+  --card: #241814;
+  --cyan: #e34c26;
+  --amber: #f16529;
+  --live: #e34c26;
+}
+html[data-theme="css"] {
+  --bg: #0e1218;
+  --text: #e6eef8;
+  --muted: #8ea0b8;
+  --line: #243044;
+  --card: #161e2c;
+  --cyan: #2965f1;
+  --amber: #33a9dc;
+  --live: #2965f1;
+}
+html[data-theme="javascript"] {
+  --bg: #111111;
+  --text: #f4f1e8;
+  --muted: #b3aa90;
+  --line: #2c2a22;
+  --card: #1c1c1a;
+  --cyan: #f7df1e;
+  --amber: #ffe56a;
+  --live: #f7df1e;
+}
+html[data-theme="cpp"] {
+  --bg: #0c1218;
+  --text: #e4eef6;
+  --muted: #8aa0b4;
+  --line: #1e3348;
+  --card: #14202c;
+  --cyan: #659ad2;
+  --amber: #9ecbff;
+  --live: #659ad2;
+}
+
+html[data-theme="rust"] body,
+html[data-theme="node"] body,
+html[data-theme="java"] body,
+html[data-theme="python"] body,
+html[data-theme="html"] body,
+html[data-theme="css"] body,
+html[data-theme="javascript"] body,
+html[data-theme="cpp"] body {
+  font-family: var(--mono);
+  background-image: none;
+}
+
+html[data-theme="rust"] .header h1,
+html[data-theme="node"] .header h1,
+html[data-theme="java"] .header h1,
+html[data-theme="python"] .header h1,
+html[data-theme="html"] .header h1,
+html[data-theme="css"] .header h1,
+html[data-theme="javascript"] .header h1,
+html[data-theme="cpp"] .header h1 {
+  font-family: var(--sans);
+}
+
+html[data-theme="rust"] .rail { background: #f74c00; }
+html[data-theme="rust"] .theme-toggle { background: #1a1210; }
+html[data-theme="node"] .rail { background: #68a063; }
+html[data-theme="node"] .theme-toggle { background: #141816; }
+html[data-theme="java"] .rail { background: #cc7832; }
+html[data-theme="java"] .theme-toggle { background: #1e1f22; }
+html[data-theme="python"] .rail { background: #ffd43b; }
+html[data-theme="python"] .theme-toggle { background: #12151c; }
+html[data-theme="html"] .rail { background: #e34c26; }
+html[data-theme="html"] .theme-toggle { background: #1a120f; }
+html[data-theme="css"] .rail { background: #2965f1; }
+html[data-theme="css"] .theme-toggle { background: #0e1218; }
+html[data-theme="javascript"] .rail { background: #f7df1e; }
+html[data-theme="javascript"] .theme-toggle { background: #111111; }
+html[data-theme="cpp"] .rail { background: #659ad2; }
+html[data-theme="cpp"] .theme-toggle { background: #0c1218; }
+
+html[data-theme="rust"] [data-block="spec"] > .label::after { content: "Cargo.toml"; }
+html[data-theme="rust"] [data-block="experience"] > .label::after { content: "src/lib.rs"; }
+html[data-theme="rust"] [data-block="skills"] > .label::after { content: "traits"; }
+html[data-theme="rust"] [data-block="education"] > .label::after { content: "origin"; }
+html[data-theme="rust"] .pill-label::after { content: "cargo"; }
+html[data-theme="rust"] .job:first-child h3::before { content: "pub fn "; color: #f74c00; font-size: 0.78rem; }
+html[data-theme="rust"] .job:not(:first-child) h3::before { content: "fn "; color: #dea584; font-size: 0.78rem; }
+html[data-theme="rust"] .skill-group h3::before { content: "trait "; color: #f74c00; font-size: 0.72rem; }
+
+html[data-theme="node"] [data-block="spec"] > .label::after { content: "package.json"; }
+html[data-theme="node"] [data-block="experience"] > .label::after { content: "index.js"; }
+html[data-theme="node"] [data-block="skills"] > .label::after { content: "node_modules"; }
+html[data-theme="node"] [data-block="education"] > .label::after { content: "engines"; }
+html[data-theme="node"] .pill-label::after { content: "node"; }
+html[data-theme="node"] .job:first-child h3::before { content: "export "; color: #68a063; font-size: 0.78rem; }
+html[data-theme="node"] .job:not(:first-child) h3::before { content: "const "; color: #b7d7a8; font-size: 0.78rem; }
+html[data-theme="node"] .skill-group h3::before { content: "require "; color: #68a063; font-size: 0.72rem; }
+
+html[data-theme="java"] [data-block="spec"] > .label::after { content: "pom.xml"; }
+html[data-theme="java"] [data-block="experience"] > .label::after { content: "Main.java"; }
+html[data-theme="java"] [data-block="skills"] > .label::after { content: "interfaces"; }
+html[data-theme="java"] [data-block="education"] > .label::after { content: "classpath"; }
+html[data-theme="java"] .pill-label::after { content: "jvm"; }
+html[data-theme="java"] .job:first-child h3::before { content: "public "; color: #cc7832; font-size: 0.78rem; }
+html[data-theme="java"] .job:not(:first-child) h3::before { content: "class "; color: #6897bb; font-size: 0.78rem; }
+html[data-theme="java"] .skill-group h3::before { content: "interface "; color: #cc7832; font-size: 0.72rem; }
+
+html[data-theme="python"] [data-block="spec"] > .label::after { content: "pyproject.toml"; }
+html[data-theme="python"] [data-block="experience"] > .label::after { content: "main.py"; }
+html[data-theme="python"] [data-block="skills"] > .label::after { content: "site-packages"; }
+html[data-theme="python"] [data-block="education"] > .label::after { content: "__init__.py"; }
+html[data-theme="python"] .pill-label::after { content: "cpython"; }
+html[data-theme="python"] .job h3::before { content: "def "; font-size: 0.78rem; }
+html[data-theme="python"] .job:first-child h3::before { color: #ffd43b; }
+html[data-theme="python"] .job:not(:first-child) h3::before { color: #4b8bbe; }
+html[data-theme="python"] .skill-group h3::before { content: "class "; color: #ffd43b; font-size: 0.72rem; }
+
+html[data-theme="html"] [data-block="spec"] > .label::after { content: "index.html"; }
+html[data-theme="html"] [data-block="experience"] > .label::after { content: "body"; }
+html[data-theme="html"] [data-block="skills"] > .label::after { content: "elements"; }
+html[data-theme="html"] [data-block="education"] > .label::after { content: "head"; }
+html[data-theme="html"] .pill-label::after { content: "markup"; }
+html[data-theme="html"] .job:first-child h3::before { content: "<main> "; color: #e34c26; font-size: 0.78rem; }
+html[data-theme="html"] .job:not(:first-child) h3::before { content: "<section> "; color: #f16529; font-size: 0.78rem; }
+html[data-theme="html"] .skill-group h3::before { content: "<ul> "; color: #e34c26; font-size: 0.72rem; }
+
+html[data-theme="css"] [data-block="spec"] > .label::after { content: "styles.css"; }
+html[data-theme="css"] [data-block="experience"] > .label::after { content: "rules"; }
+html[data-theme="css"] [data-block="skills"] > .label::after { content: "selectors"; }
+html[data-theme="css"] [data-block="education"] > .label::after { content: "cascade"; }
+html[data-theme="css"] .pill-label::after { content: "css"; }
+html[data-theme="css"] .job:first-child h3::before { content: ".current "; color: #2965f1; font-size: 0.78rem; }
+html[data-theme="css"] .job:not(:first-child) h3::before { content: ".job "; color: #33a9dc; font-size: 0.78rem; }
+html[data-theme="css"] .skill-group h3::before { content: "#"; color: #2965f1; font-size: 0.72rem; }
+
+html[data-theme="javascript"] [data-block="spec"] > .label::after { content: "script.js"; }
+html[data-theme="javascript"] [data-block="experience"] > .label::after { content: "functions"; }
+html[data-theme="javascript"] [data-block="skills"] > .label::after { content: "prototypes"; }
+html[data-theme="javascript"] [data-block="education"] > .label::after { content: "\"use strict\""; }
+html[data-theme="javascript"] .pill-label::after { content: "v8"; }
+html[data-theme="javascript"] .job:first-child h3::before { content: "function "; color: #f7df1e; font-size: 0.78rem; }
+html[data-theme="javascript"] .job:not(:first-child) h3::before { content: "var "; color: #ffe56a; font-size: 0.78rem; }
+html[data-theme="javascript"] .skill-group h3::before { content: "this."; color: #f7df1e; font-size: 0.72rem; }
+
+html[data-theme="cpp"] [data-block="spec"] > .label::after { content: "main.cpp"; }
+html[data-theme="cpp"] [data-block="experience"] > .label::after { content: "src"; }
+html[data-theme="cpp"] [data-block="skills"] > .label::after { content: "templates"; }
+html[data-theme="cpp"] [data-block="education"] > .label::after { content: "makefile"; }
+html[data-theme="cpp"] .pill-label::after { content: "g++"; }
+html[data-theme="cpp"] .job:first-child h3::before { content: "int "; color: #659ad2; font-size: 0.78rem; }
+html[data-theme="cpp"] .job:not(:first-child) h3::before { content: "auto "; color: #9ecbff; font-size: 0.78rem; }
+html[data-theme="cpp"] .skill-group h3::before { content: "template "; color: #659ad2; font-size: 0.72rem; }
